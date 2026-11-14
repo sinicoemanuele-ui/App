@@ -1,0 +1,48 @@
+# La Mia Giornata – pacchetto PWA
+
+Questa è una prima versione funzionante dell'applicazione, con interfaccia mobile scura e dati salvati localmente nel browser.
+
+## Cosa include
+- Inserimento lavori con cliente, descrizione, data e ore a incrementi di 0,5.
+- Archivio clienti: aggiunta, ricerca tramite selezione, rinomina, archiviazione e riattivazione.
+- Materiali multipli per lavoro: codice, descrizione, quantità, unità Nr/Mt, numero e data DDT.
+- Posizione acquisita solo premendo il pulsante, con collegamento a Google Maps nello storico.
+- Storico con filtri per cliente e periodo; modifica e cancellazione lavori.
+- Riepilogo con totale ore e ore per cliente.
+- Chiusura giornata con possibilità di forzare sotto le 8 ore.
+- Backup JSON e ripristino.
+- Esportazione Excel XML `.xls` per intervallo personalizzato.
+- Eliminazione dei lavori per intervallo, con anteprima e conferma; clienti conservati.
+- Service worker per cache offline.
+
+## Limiti da conoscere in questa prima versione
+1. I dati sono salvati nel browser sul dispositivo: cancellare i dati del sito o cambiare browser/dispositivo può farli perdere. Esegui backup regolari.
+2. Il file `.xls` usa il formato XML compatibile con Excel (apribile in Excel), non il formato moderno `.xlsx`.
+3. La PWA richiede un indirizzo HTTPS per l'installazione da Safari. GitHub Pages offre hosting statico gratuito.
+4. La chiusura giornata implementa la verifica delle 8 ore e la forzatura. Il flusso completo di gestione automatica dei giorni precedenti non è ancora implementato.
+5. Il calendario Apple non è integrato.
+6. Questa versione non è stata ancora collaudata sul tuo iPhone reale: va verificata prima di usarla come archivio operativo principale.
+
+## Pubblicazione gratuita con GitHub Pages da Windows
+Serve un account GitHub gratuito.
+
+1. Sul PC Windows, scarica e decomprimi `la-mia-giornata-pwa.zip`.
+2. Apri https://github.com e accedi o crea un account.
+3. Crea un nuovo repository, ad esempio `la-mia-giornata`. Seleziona **Public** e crea il repository.
+4. Nel repository scegli **Add file > Upload files**.
+5. Apri la cartella `la-mia-giornata` estratta sul PC e trascina TUTTI i file contenuti (index.html, app.js, style.css, sw.js, manifest.webmanifest, icon.svg) nella pagina di caricamento GitHub. Non caricare soltanto lo ZIP e non creare una cartella annidata.
+6. Premi **Commit changes**.
+7. Vai in **Settings > Pages**. In **Build and deployment** scegli **Deploy from a branch**, branch `main`, folder `/(root)`, quindi **Save**.
+8. Attendi la pubblicazione. GitHub mostrerà un indirizzo simile a `https://TUONOME.github.io/la-mia-giornata/`.
+9. Apri quell'indirizzo su iPhone con Safari. Premi Condividi > **Aggiungi alla schermata Home** > Aggiungi.
+10. Apri l'icona appena creata. Carica l'app una prima volta mentre sei online; poi prova la modalità aereo per verificare che si apra offline.
+
+## Importante: prima di inserire dati reali
+- Prova ad aggiungere un cliente e un lavoro di test.
+- Aggiungi due materiali, esporta un intervallo Excel e verifica il file su PC.
+- Esegui un backup JSON e prova il ripristino.
+- Verifica che la PWA si apra offline.
+- Solo dopo queste prove inizia a usarla per le registrazioni reali.
+
+## Aggiornare l'app
+Quando ricevi una nuova versione dei file, caricali nel repository GitHub sostituendo quelli esistenti. La cache offline può impiegare un'apertura/ricaricamento per aggiornarsi.

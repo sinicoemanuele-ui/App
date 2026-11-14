@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#081426">
+  <meta name="description" content="Diario giornaliero dei lavori, ore, clienti e materiali.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <title>La Mia Giornata</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">DIARIO DI LAVORO</div>
+        <h1>La Mia Giornata</h1>
+        <div class="subdate" id="todayLabel"></div>
+      </div>
+      <div class="today-total"><span>ORE OGGI</span><strong id="todayHours">0,0 h</strong></div>
+    </header>
+
+    <main>
+      <section class="page active" id="page-insert">
+        <div class="section-heading"><div><span class="eyebrow">NUOVA REGISTRAZIONE</span><h2>Inserisci lavoro</h2></div><span class="round-icon">＋</span></div>
+        <form id="jobForm" class="panel">
+          <input type="hidden" id="editId">
+          <label>Cliente</label>
+          <div class="inline-field">
+            <select id="clientSelect" required><option value="">Seleziona cliente</option></select>
+            <button class="small-button" type="button" id="quickClient">＋</button>
+          </div>
+          <label for="description">Descrizione lavoro</label>
+          <input id="description" type="text" placeholder="Es. Installazione impianto" required maxlength="160">
+          <label for="jobDate">Data</label>
+          <input id="jobDate" type="date" required>
+          <label>Ore lavorate</label>
+          <div class="hours-control">
+            <button type="button" class="stepper" id="minusHours" aria-label="Diminuisci ore">−</button>
+            <strong id="hoursValue">0,0 <small>h</small></strong>
+            <button type="button" class="stepper plus" id="plusHours" aria-label="Aumenta ore">＋</button>
+          </div>
+          <div class="expand-head" id="materialsToggle"><span><span class="cyan">▦</span> Materiali <small id="materialCount">Facoltativo</small></span><span id="materialsArrow">＋</span></div>
+          <div id="materialsArea" class="materials-area hidden">
+            <div id="materialsList"></div>
+            <button type="button" class="outline-button" id="addMaterial">＋ Aggiungi materiale</button>
+          </div>
+          <div class="location-row">
+            <div><b>Posizione</b><small id="locationStatus">Facoltativa · acquisita solo su richiesta</small></div>
+            <button type="button" class="outline-button" id="getLocation">⌖ Inserisci posizione</button>
+          </div>
+          <button type="submit" class="primary-button" id="saveJob">Salva lavoro</button>
+          <button type="button" class="text-button hidden" id="cancelEdit">Annulla modifica</button>
+        </form>
+        <div class="panel close-panel">
+          <div><b>Chiusura giornata</b><small>Controlla le ore registrate prima di chiudere.</small></div>
+          <button class="outline-button" id="closeDay">Chiudi giornata</button>
+        </div>
+      </section>
+
+      <section class="page" id="page-history">
+        <div class="section-heading"><div><span class="eyebrow">LE TUE REGISTRAZIONI</span><h2>Storico</h2></div></div>
+        <div class="panel filters">
+          <label>Cliente</label><select id="historyClient"><option value="">Tutti i clienti</option></select>
+          <label>Periodo</label>
+          <select id="historyPeriod">
+            <option value="all">Tutti</option><option value="day">Giorno</option><option value="week">Settimana</option><option value="month">Mese</option><option value="custom">Intervallo personalizzato</option>
+          </select>
+          <div class="date-range hidden" id="historyDates"><input type="date" id="historyFrom"><input type="date" id="historyTo"></div>
+        </div>
+        <div id="historyList" class="stack"></div>
+      </section>
+
+      <section class="page" id="page-summary">
+        <div class="section-heading"><div><span class="eyebrow">IL TUO TEMPO</span><h2>Riepilogo</h2></div></div>
+        <div class="panel filters">
+          <label>Periodo</label>
+          <select id="summaryPeriod">
+            <option value="day">Giorno</option><option value="week">Settimana</option><option value="month" selected>Mese</option><option value="custom">Intervallo personalizzato</option>
+          </select>
+          <div class="date-range hidden" id="summaryDates"><input type="date" id="summaryFrom"><input type="date" id="summaryTo"></div>
+        </div>
+        <div class="panel total-panel"><span>TOTALE ORE</span><strong id="summaryTotal">0,0 h</strong></div>
+        <div class="panel"><h3>Ore per cliente</h3><div id="clientTotals" class="totals-list"></div></div>
+      </section>
+
+      <section class="page" id="page-settings">
+        <div class="section-heading"><div><span class="eyebrow">PERSONALIZZA</span><h2>Impostazioni</h2></div></div>
+        <div class="panel">
+          <h3>Clienti</h3>
+          <div class="inline-field"><input id="newClientName" placeholder="Nome nuovo cliente"><button class="small-button" id="addClient">＋</button></div>
+          <div id="clientList" class="client-list"></div>
+        </div>
+        <div class="panel">
+          <h3>Backup e ripristino</h3>
+          <p class="muted">Il backup salva lavori, clienti e impostazioni in un file JSON. Conservalo in un luogo sicuro.</p>
+          <button class="primary-button" id="backupButton">Esporta backup</button>
+          <label class="file-button">Ripristina da backup<input type="file" id="restoreFile" accept="application/json"></label>
+        </div>
+        <div class="panel">
+          <h3>Esportazione Excel</h3>
+          <p class="muted">Scegli un intervallo. Il foglio riporta i lavori giorno per giorno, con i materiali associati al cliente e al lavoro.</p>
+          <label>Dal</label><input type="date" id="exportFrom">
+          <label>Al</label><input type="date" id="exportTo">
+          <button class="primary-button" id="exportButton">Esporta Excel (.xls)</button>
+        </div>
+        <div class="panel danger-panel">
+          <h3>Elimina dati per intervallo</h3>
+          <p class="muted">L'eliminazione riguarda i lavori e i relativi materiali e DDT. L'archivio clienti non viene cancellato. Prima esporta o fai un backup.</p>
+          <label>Dal</label><input type="date" id="deleteFrom">
+          <label>Al</label><input type="date" id="deleteTo">
+          <button class="danger-button" id="previewDelete">Verifica lavori da eliminare</button>
+          <div id="deletePreview" class="delete-preview hidden"></div>
+        </div>
+        <div class="panel">
+          <h3>Informazioni</h3>
+          <p class="muted">Versione iniziale 1.0 · Dati salvati su questo dispositivo. Il backup manuale è consigliato regolarmente.</p>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-page="insert"><span>＋</span>Inserisci</button>
+      <button class="nav-item" data-page="history"><span>▤</span>Storico</button>
+      <button class="nav-item" data-page="summary"><span>▥</span>Riepilogo</button>
+      <button class="nav-item" data-page="settings"><span>⚙</span>Impostazioni</button>
+    </nav>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>

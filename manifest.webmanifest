@@ -1,0 +1,18 @@
+{
+  "name": "La Mia Giornata",
+  "short_name": "La Mia Giornata",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#081426",
+  "theme_color": "#081426",
+  "description": "Diario giornaliero dei lavori, ore, clienti e materiali.",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
